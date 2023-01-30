@@ -2,22 +2,20 @@ import throttle from 'lodash.throttle';
 
 const feedbackForm = document.querySelector('.feedback-form');
 const emailMessage = {};
+const LOCALSTORAGE_KEY = 'feedback-form-state';
 
 feedbackForm.addEventListener('input', throttle(onInputForm, 500));
 feedbackForm.addEventListener('submit', onSubmitForm);
 
-function onInputForm(e) {
-  const {
-    elements: { email, message },
-  } = e.currentTarget;
-  emailMessage.email = email.value;
-  emailMessage.message = message.value;
-  localStorage.setItem('feedback-form-state', JSON.stringify(emailMessage));
+function onInputForm({ target }) {
+  emailMessage[target.name] = target.value;
+  console.log(emailMessage);
+  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(emailMessage));
 }
 
 function loadSavedInStorage() {
   const parsedDataInStorage = JSON.parse(
-    localStorage.getItem('feedback-form-state')
+    localStorage.getItem(LOCALSTORAGE_KEY)
   );
   if (parsedDataInStorage) {
     feedbackForm.email.value = parsedDataInStorage.email;
@@ -26,14 +24,22 @@ function loadSavedInStorage() {
 }
 
 function clearStorage() {
-  localStorage.removeItem('feedback-form-state');
+  localStorage.removeItem(LOCALSTORAGE_KEY);
 }
 
 function onSubmitForm(e) {
   e.preventDefault();
-  console.log(localStorage.getItem('feedback-form-state'));
-  feedbackForm.reset();
-  clearStorage();
+
+  if (
+    e.currentTarget.email.value === '' ||
+    e.currentTarget.message.value === ''
+  ) {
+    alert('Всі поля повинні бути заповнені!');
+  } else {
+    console.log(localStorage.getItem(LOCALSTORAGE_KEY));
+    feedbackForm.reset();
+    clearStorage();
+  }
 }
 
 loadSavedInStorage();
