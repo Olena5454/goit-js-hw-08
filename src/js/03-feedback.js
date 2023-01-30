@@ -9,7 +9,6 @@ feedbackForm.addEventListener('submit', onSubmitForm);
 
 function onInputForm({ target }) {
   emailMessage[target.name] = target.value;
-  console.log(emailMessage);
   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(emailMessage));
 }
 
@@ -18,8 +17,8 @@ function loadSavedInStorage() {
     localStorage.getItem(LOCALSTORAGE_KEY)
   );
   if (parsedDataInStorage) {
-    feedbackForm.email.value = parsedDataInStorage.email;
-    feedbackForm.message.value = parsedDataInStorage.message;
+    feedbackForm.email.value = parsedDataInStorage.email || '';
+    feedbackForm.message.value = parsedDataInStorage.message || '';
   }
 }
 
