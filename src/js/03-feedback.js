@@ -1,8 +1,8 @@
 import throttle from 'lodash.throttle';
 
 const feedbackForm = document.querySelector('.feedback-form');
-const emailMessage = {};
 const LOCALSTORAGE_KEY = 'feedback-form-state';
+let emailMessage = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) || {};
 
 feedbackForm.addEventListener('input', throttle(onInputForm, 500));
 feedbackForm.addEventListener('submit', onSubmitForm);
